@@ -36,7 +36,7 @@ public class PlayerControls : MonoBehaviour
 
         // Set the raycast to be slightly beneath the player's feet
         playerHeight = GetComponent<BoxCollider>().size.y * transform.localScale.y;
-        raycastDistance = (playerHeight / 2) + 0.2f;
+        raycastDistance = (playerHeight / 2) + 2f;
 
         // Hides the mouse
         Cursor.lockState = CursorLockMode.Locked;
@@ -58,8 +58,10 @@ public class PlayerControls : MonoBehaviour
         // Checking when we're on the ground and keeping track of our ground check delay
         if (!isGrounded && groundCheckTimer <= 0f)
         {
-            Vector3 rayOrigin = transform.position + Vector3.up * 0.1f;
+            Vector3 rayOrigin = transform.position + Vector3.up * 0.2f;
             isGrounded = Physics.Raycast(rayOrigin, Vector3.down, raycastDistance, groundLayer);
+            Debug.DrawLine(rayOrigin, transform.position);
+            Debug.Log("isGrounded:" + isGrounded);
         }
         else
         {
@@ -106,6 +108,7 @@ public class PlayerControls : MonoBehaviour
 
     void Jump()
     {
+        Debug.Log("JumpCalled");
         isGrounded = false;
         groundCheckTimer = groundCheckDelay;
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z); // Initial burst for the jump
