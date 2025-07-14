@@ -28,6 +28,14 @@ public class PlayerControls : MonoBehaviour
     private float playerHeight;
     private float raycastDistance;
 
+    //Animation
+    [SerializeField] private Animator animator;
+    [SerializeField] private bool playerMoving;
+    string moveBool = "PlayerMoving";
+    string sitTrigger = "Sittin";
+    string idleTrigger = "Idle";
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -82,8 +90,9 @@ public class PlayerControls : MonoBehaviour
         Vector3 movement = (transform.right * moveHorizontal + transform.forward * moveForward).normalized;
         Vector3 targetVelocity = movement * MoveSpeed;
 
+        
         // Apply movement to the Rigidbody
-        Vector3 velocity = rb.linearVelocity;
+        Vector3 velocity = rb.linearVelocity;        
         velocity.x = targetVelocity.x;
         velocity.z = targetVelocity.z;
         rb.linearVelocity = velocity;
@@ -92,9 +101,22 @@ public class PlayerControls : MonoBehaviour
         if (isGrounded && moveHorizontal == 0 && moveForward == 0)
         {
             rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            animator.SetBool(moveBool, false);
+        }
+        else if(moveForward != 0 | moveHorizontal != 0)
+        {
+            animator.SetBool(moveBool, true);
+            Debug.Log("Play move anim");
         }
     }
 
+    public void CheckAnimation()
+    {
+        if(moveHorizontal > 0 && moveForward > 0)
+        {
+
+        }
+    }
     void RotateCamera()
     {
         float horizontalRotation = Input.GetAxis("Mouse X") * mouseSensitivity;
